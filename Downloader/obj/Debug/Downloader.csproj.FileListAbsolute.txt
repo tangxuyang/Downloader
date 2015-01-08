@@ -1,1 +1,0 @@
-c:\users\god\documents\visual studio 2013\Projects\Downloader\Downloader\bin\Debug\Downloader.exe.config
