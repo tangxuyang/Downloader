@@ -14,7 +14,7 @@ namespace Downloader
     {
         private static string aPattern = "<a\\s{1,}([A-Za-z0-9#:\\.\\s=\"'/\\-_&\\?\\%\u4e00-\u9fa5]*)>";
         public static string hrefPattern = "href\\s*=\\s*\"[A-Za-z0-9\\.\\s=\\-_&\\?\\%/:]*\"";
-        public static List<string> Analyze(string text,string domain)
+        public static List<string> Analyze(string text,string domain,string server)
         {
             
             Regex regex = new Regex(aPattern);
@@ -28,23 +28,26 @@ namespace Downloader
                 Console.WriteLine(match.Value);
                 foreach(Match m in ms)
                 {
-                    string s = GetUrl(m.Value);
+                    string s = GetUrl(m.Value).ToLower();
                     Console.WriteLine(m.Value);
-                    if(s.ToLower().StartsWith("http://"))
+                    if(s.StartsWith("http://"))
                     {
+                        
+                        result.Add(s);
+                    }
+                    else if(!s.StartsWith("/"))
+                    {
+                        s = domain + "/" + s.Trim('/');
+                        s = s.Trim('/');
                         result.Add(s);
                     }
                     else
                     {
-                        s = domain + "/" + s.Trim('/');
-                        result.Add(s);
+
                     }
                 }
             }
-            //foreach(var v in result)
-            //{
-            //    Console.WriteLine(v);
-            //}
+
             return result;
         }
 
