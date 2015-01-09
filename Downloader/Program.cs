@@ -20,6 +20,7 @@ namespace Downloader
             thread.IsBackground = true;
             thread.Start(url);
             Logger.Instance.WriteLog("Thread is started.");
+
             //DateTime now = DateTime.Now;
             //TimeSpan ts = new TimeSpan(0, 0, 30);
             //while(DateTime.Now - now<ts )
