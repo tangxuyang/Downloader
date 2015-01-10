@@ -12,8 +12,9 @@ namespace Downloader
     {
         public static string Request(string url)
         {
-            HttpWebRequest request = WebRequest.Create(url.TrimEnd('/')) as HttpWebRequest;
+            HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             StreamReader sr = new StreamReader(request.GetResponse().GetResponseStream());
+            
             return sr.ReadToEnd();
         }
 
@@ -21,7 +22,7 @@ namespace Downloader
         {
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             var stream = request.GetResponse().GetResponseStream();
-            var tags = TextAnalyzer.Split(url);
+            var tags = UrlHelper.SplitUrl(url);
             string fileName =Path.Combine(rootFolder, tags[tags.Length-1]);
             FileStream fs = new FileStream(fileName, FileMode.Create);
             byte[] buffer = new byte[10240];

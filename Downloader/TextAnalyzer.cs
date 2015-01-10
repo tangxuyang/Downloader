@@ -14,58 +14,52 @@ namespace Downloader
     {
         private static string aPattern = "<a\\s{1,}([A-Za-z0-9#:\\.\\s=\"'/\\-_&\\?\\%\u4e00-\u9fa5]*)>";
         public static string hrefPattern = "href\\s*=\\s*\"[A-Za-z0-9\\.\\s=\\-_&\\?\\%/:]*\"";
-        public static List<string> Analyze(string text,string domain,string server)
+        
+        private static List<string> Analyze(string text,string pattern)
         {
-            
-            Regex regex = new Regex(aPattern);
-            Regex regex2 = new Regex(hrefPattern);
+            Regex regex = new Regex(pattern);
+
             var matches = regex.Matches(text);
             List<string> result = new List<string>();
             foreach (Match match in matches)
             {
-                //result.Add(match.Value);
-                var ms = regex2.Matches(match.Value);
-                Console.WriteLine(match.Value);
-                foreach(Match m in ms)
-                {
-                    string s = GetUrl(m.Value).ToLower();
-                    Console.WriteLine(m.Value);
-                    if(s.StartsWith("http://"))
-                    {
-                        
-                        result.Add(s);
-                    }
-                    else if(!s.StartsWith("/"))
-                    {
-                        s = domain + "/" + s.Trim('/');
-                        s = s.Trim('/');
-                        result.Add(s);
-                    }
-                    else
-                    {
-
-                    }
-                }
+                result.Add(match.Value);
             }
 
             return result;
         }
 
-        private static string GetUrl (string str)
+        public static List<string> GetAllAnchors(string text)
         {
-            int startIndex = str.IndexOf("\"");
-            int lastIndex = str.LastIndexOf("\"");
-            return str.Substring(startIndex + 1, lastIndex - startIndex - 1);
+            return Analyze(text, aPattern);
         }
 
-        public static string[] Split(string url)
+        public static string GetHref(string text)
         {
-            string str = url.Trim().ToLower();
-            if (str.StartsWith("http://"))
+            var result = Analyze(text, hrefPattern);
+            if(result !=null && result.Count>0)
             {
-                str = str.Substring(7);
+                return result[0];
             }
-            return str.Split('/');
+
+            return null;
         }
+
+        private static string GetUrlFromHref (string href)
+        {
+            int startIndex = href.IndexOf("\"");
+            int lastIndex = href.LastIndexOf("\"");
+            return href.Substring(startIndex + 1, lastIndex - startIndex - 1);
+        }
+
+        //public static string[] Split(string url)
+        //{
+        //    string str = url.Trim().ToLower().Trim('/') ;
+        //    if (str.StartsWith("http://"))
+        //    {
+        //        str = str.Substring(7);
+        //    }
+        //    return str.Split('/');
+        //}
     }
 }

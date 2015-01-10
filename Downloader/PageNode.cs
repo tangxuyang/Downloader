@@ -38,7 +38,7 @@ namespace Downloader
 
         public static PageNode CreateTree(string url)
         {
-            string[] tags = TextAnalyzer.Split(url);
+            string[] tags = UrlHelper.SplitUrl(url);
             PageNode root = null;
             if(tags.Length>0)
             {
@@ -50,7 +50,7 @@ namespace Downloader
 
         public static bool IsVisited(PageNode root, string url)
         {
-            string[] tags = TextAnalyzer.Split(url);
+            string[] tags = UrlHelper.SplitUrl(url);
             if(tags.Length == 0 || tags.Length== 1|| tags[0]!=root.Tag)
             {
                 return false;
@@ -80,7 +80,7 @@ namespace Downloader
 
         public static PageNode FindNodeRecursive(PageNode root, string url)
         {
-            string[] tags = TextAnalyzer.Split(url);
+            string[] tags = UrlHelper.SplitUrl(url);
             if (tags.Length == 0 || tags[0] != root.Tag)
             {
                 return null;
@@ -104,7 +104,7 @@ namespace Downloader
 
         public static PageNode AddToTree(PageNode root, string url)
         {
-            string[] tags = TextAnalyzer.Split(url);
+            string[] tags = UrlHelper.SplitUrl(url);
             if (tags.Length == 0 || tags[0] != root.Tag)
             {
                 return null ;
